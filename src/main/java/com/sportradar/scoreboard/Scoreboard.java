@@ -29,6 +29,13 @@ public class Scoreboard {
         }
     }
 
+    public void finishMatch(String homeTeam, String awayTeam) {
+        matches.removeIf(match ->
+                match.getHomeTeam().equals(homeTeam) &&
+                        match.getAwayTeam().equals(awayTeam)
+        );
+    }
+
     public List<Match> getMatches() {
         // Return a copy to protect internal state
         return new ArrayList<>(matches);
