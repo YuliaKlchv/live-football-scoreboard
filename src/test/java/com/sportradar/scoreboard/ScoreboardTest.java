@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ScoreboardTest {
 
@@ -137,5 +138,72 @@ class ScoreboardTest {
         List<Match> matches = scoreboard.getMatches();
 
         assertEquals(1, matches.size());
+    }
+
+    @Test
+    void shouldReturnEmptySummaryWhenNoMatchesExist() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        List<Match> summary = scoreboard.getSummary();
+
+        assertEquals(0, summary.size());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenHomeTeamIsNull() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.startMatch(null, "Brazil");
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAwayTeamIsNull() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.startMatch("Spain", null);
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTeamsAreTheSame() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.startMatch("Spain", "Spain");
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenHomeTeamIsBlank() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.startMatch("   ", "Brazil");
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenScoreIsNegative() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.startMatch("Spain", "Brazil");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.updateScore("Spain", "Brazil", -1, 0);
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAwayScoreIsNegative() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.startMatch("Spain", "Brazil");
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            scoreboard.updateScore("Spain", "Brazil", 0, -1);
+        });
     }
 }

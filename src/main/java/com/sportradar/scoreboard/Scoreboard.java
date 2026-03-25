@@ -9,7 +9,21 @@ public class Scoreboard {
     private final List<Match> matches = new ArrayList<>();
 
     public void startMatch(String homeTeam, String awayTeam) {
-
+        if (homeTeam == null) {
+            throw new IllegalArgumentException("Home team cannot be null");
+        }
+        if (awayTeam == null) {
+            throw new IllegalArgumentException("Away team cannot be null");
+        }
+        if (homeTeam.trim().isEmpty()) {
+            throw new IllegalArgumentException("Home team cannot be blank");
+        }
+        if (awayTeam.trim().isEmpty()) {
+            throw new IllegalArgumentException("Away team cannot be blank");
+        }
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("A team cannot play against itself");
+        }
         // prevent duplicate matches
         for (Match match : matches) {
             if (match.getHomeTeam().equals(homeTeam) &&
@@ -30,6 +44,9 @@ public class Scoreboard {
     }
 
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
+        if (homeScore < 0 || awayScore < 0) {
+            throw new IllegalArgumentException("Score cannot be negative");
+        }
         for (Match match : matches) {
             if (match.getHomeTeam().equals(homeTeam) &&
                     match.getAwayTeam().equals(awayTeam)) {
