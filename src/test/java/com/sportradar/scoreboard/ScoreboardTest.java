@@ -126,4 +126,16 @@ class ScoreboardTest {
         assertEquals(1, summary.size());
         assertEquals("Spain", summary.get(0).getHomeTeam());
     }
+
+    @Test
+    void shouldNotAllowDuplicateMatches() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.startMatch("Mexico", "Canada");
+
+        List<Match> matches = scoreboard.getMatches();
+
+        assertEquals(1, matches.size());
+    }
 }

@@ -9,6 +9,15 @@ public class Scoreboard {
     private final List<Match> matches = new ArrayList<>();
 
     public void startMatch(String homeTeam, String awayTeam) {
+
+        // prevent duplicate matches
+        for (Match match : matches) {
+            if (match.getHomeTeam().equals(homeTeam) &&
+                    match.getAwayTeam().equals(awayTeam)) {
+                return;
+            }
+        }
+
         Match match = new Match(
                 homeTeam,
                 awayTeam,
@@ -16,8 +25,10 @@ public class Scoreboard {
                 0,
                 System.nanoTime()
         );
+
         matches.add(match);
     }
+
     public void updateScore(String homeTeam, String awayTeam, int homeScore, int awayScore) {
         for (Match match : matches) {
             if (match.getHomeTeam().equals(homeTeam) &&
