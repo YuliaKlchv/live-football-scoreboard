@@ -48,4 +48,39 @@ class ScoreboardTest {
 
         assertEquals(0, matches.size());
     }
+
+    @Test
+    void shouldReturnMatchesOrderedByTotalScoreDescending() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.startMatch("Spain", "Brazil");
+
+        scoreboard.updateScore("Mexico", "Canada", 0, 5);
+        scoreboard.updateScore("Spain", "Brazil", 10, 2);
+
+        List<Match> summary = scoreboard.getSummary();
+
+        assertEquals(2, summary.size());
+        assertEquals("Spain", summary.get(0).getHomeTeam());
+        assertEquals("Brazil", summary.get(0).getAwayTeam());
+        assertEquals("Mexico", summary.get(1).getHomeTeam());
+        assertEquals("Canada", summary.get(1).getAwayTeam());
+    }
+
+    @Test
+    void shouldOrderByMostRecentWhenScoresAreEqual() {
+        Scoreboard scoreboard = new Scoreboard();
+
+        scoreboard.startMatch("Mexico", "Canada");
+        scoreboard.startMatch("Spain", "Brazil");
+
+        scoreboard.updateScore("Mexico", "Canada", 2, 2);
+        scoreboard.updateScore("Spain", "Brazil", 2, 2);
+
+        List<Match> summary = scoreboard.getSummary();
+
+        assertEquals("Spain", summary.get(0).getHomeTeam());
+        assertEquals("Brazil", summary.get(0).getAwayTeam());
+    }
 }

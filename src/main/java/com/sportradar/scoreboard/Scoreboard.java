@@ -36,6 +36,20 @@ public class Scoreboard {
         );
     }
 
+    public List<Match> getSummary() {
+        return matches.stream()
+                .sorted((match1, match2) -> {
+                    int scoreComparison = Integer.compare(match2.getTotalScore(), match1.getTotalScore());
+
+                    if (scoreComparison != 0) {
+                        return scoreComparison;
+                    }
+
+                    return Long.compare(match2.getStartedAt(), match1.getStartedAt());
+                })
+                .toList();
+    }
+
     public List<Match> getMatches() {
         // Return a copy to protect internal state
         return new ArrayList<>(matches);
